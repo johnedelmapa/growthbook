@@ -28,6 +28,14 @@ RUN \
   && yarn install --frozen-lockfile --production=true --ignore-optional
 
 
+# Pull NGINX image
+FROM nginx:1.15
+# Move all build files to NGINX serve folder
+COPY --from=build /build /usr/share/nginx/html
+# Setup NGINX with config
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+
 # Package the full app together
 FROM python:3.9-slim
 WORKDIR /usr/local/src/app
